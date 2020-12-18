@@ -269,23 +269,23 @@ bool is_threshold( const TT& tt, std::vector<int64_t>* plf = nullptr )
       }
       linear_form.emplace_back(new_threshold); //add the new threshold as last element
 
+      /* free allocated memory */
+      if(row != nullptr)
+        free(row);
+      if(column != nullptr)
+        free(column);
+
+      if(lp != nullptr) {
+        /* clean up such that all used memory by lpsolve is freed */
+        delete_lp(lp);
+      }
+
       if (plf)
       {
         *plf = linear_form;
       }
       return true;
     }
-  }
-
-  /* free allocated memory */
-  if(row != nullptr)
-    free(row);
-  if(column != nullptr)
-    free(column);
-
-  if(lp != nullptr) {
-    /* clean up such that all used memory by lpsolve is freed */
-    delete_lp(lp);
   }
   return false; //just because all the lp algorithm runs only if check == true, this is to close the other branch
 }
